@@ -33,6 +33,7 @@
 
             <!-- Notifications & Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6 sm:gap-4">
+                @auth
                 <!-- Notification Bell -->
                 @php
                     $unreadCount = Auth::user()->unreadNotifications->count();
@@ -112,6 +113,11 @@
                         </form>
                     </x-slot>
                 </x-dropdown>
+                @else
+                <!-- Guest: Show Login/Register buttons -->
+                <a href="{{ route('login') }}" class="text-sm text-slate-600 hover:text-blue-600 font-medium">Login</a>
+                <a href="{{ route('register') }}" class="text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-full shadow-lg shadow-blue-200 transition">Daftar</a>
+                @endauth
             </div>
 
             <!-- Hamburger -->
@@ -142,6 +148,7 @@
         </div>
 
         <!-- Responsive Settings Options -->
+        @auth
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
@@ -160,5 +167,13 @@
                 </form>
             </div>
         </div>
+        @else
+        <div class="pt-4 pb-1 border-t border-gray-200">
+            <div class="mt-3 space-y-1 px-4">
+                <a href="{{ route('login') }}" class="block py-2 text-slate-600 hover:text-blue-600">Login</a>
+                <a href="{{ route('register') }}" class="block py-2 text-blue-600 font-bold">Daftar</a>
+            </div>
+        </div>
+        @endauth
     </div>
 </nav>

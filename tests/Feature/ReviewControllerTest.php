@@ -26,9 +26,11 @@ class ReviewControllerTest extends TestCase
     }
 
     /** @test */
-    public function guest_can_view_reviews_page()
+    public function authenticated_user_can_view_reviews_page()
     {
-        $response = $this->get('/reviews');
+        $user = User::factory()->create();
+        
+        $response = $this->actingAs($user)->get('/reviews');
         $response->assertStatus(200);
         $response->assertViewIs('reviews.index');
     }
@@ -58,7 +60,7 @@ class ReviewControllerTest extends TestCase
             'comment' => 'Excellent service!',
         ]);
 
-        $response = $this->get('/reviews');
+        $response = $this->actingAs($user)->get('/reviews');
         $response->assertStatus(200);
         $response->assertViewHas('reviews');
     }
@@ -81,7 +83,8 @@ class ReviewControllerTest extends TestCase
             'payment_status' => '2',
         ]);
 
-        $response = $this->actingAs($user)->post('/reviews', [
+        // Route is /review (POST), not /reviews
+        $response = $this->actingAs($user)->post('/review', [
             'transaction_id' => $transaction->id,
             'rating' => 5,
             'comment' => 'Great laundry service!',
@@ -122,7 +125,7 @@ class ReviewControllerTest extends TestCase
         ]);
 
         // Try to submit another review
-        $response = $this->actingAs($user)->post('/reviews', [
+        $response = $this->actingAs($user)->post('/review', [
             'transaction_id' => $transaction->id,
             'rating' => 5,
             'comment' => 'Duplicate!',
@@ -151,7 +154,7 @@ class ReviewControllerTest extends TestCase
             'payment_status' => '2',
         ]);
 
-        $response = $this->actingAs($user2)->post('/reviews', [
+        $response = $this->actingAs($user2)->post('/review', [
             'transaction_id' => $transaction->id,
             'rating' => 5,
             'comment' => 'Not mine!',

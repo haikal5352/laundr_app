@@ -66,6 +66,7 @@
 
             <!-- Notifications & Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6 sm:gap-4">
+                <?php if(auth()->guard()->check()): ?>
                 <!-- Notification Bell -->
                 <?php
                     $unreadCount = Auth::user()->unreadNotifications->count();
@@ -178,6 +179,11 @@
 <?php $component = $__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4; ?>
 <?php unset($__componentOriginalc254754b9d5db91d5165876f9d051922ca0066f4); ?>
 <?php endif; ?>
+                <?php else: ?>
+                <!-- Guest: Show Login/Register buttons -->
+                <a href="<?php echo e(route('login')); ?>" class="text-sm text-slate-600 hover:text-blue-600 font-medium">Login</a>
+                <a href="<?php echo e(route('register')); ?>" class="text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-full shadow-lg shadow-blue-200 transition">Daftar</a>
+                <?php endif; ?>
             </div>
 
             <!-- Hamburger -->
@@ -230,6 +236,7 @@
         </div>
 
         <!-- Responsive Settings Options -->
+        <?php if(auth()->guard()->check()): ?>
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
                 <div class="font-medium text-base text-gray-800"><?php echo e(Auth::user()->name); ?></div>
@@ -260,5 +267,13 @@
                 </form>
             </div>
         </div>
+        <?php else: ?>
+        <div class="pt-4 pb-1 border-t border-gray-200">
+            <div class="mt-3 space-y-1 px-4">
+                <a href="<?php echo e(route('login')); ?>" class="block py-2 text-slate-600 hover:text-blue-600">Login</a>
+                <a href="<?php echo e(route('register')); ?>" class="block py-2 text-blue-600 font-bold">Daftar</a>
+            </div>
+        </div>
+        <?php endif; ?>
     </div>
 </nav><?php /**PATH C:\Users\achma\Documents\PROYEK 2\laundr_app\resources\views/layouts/navigation.blade.php ENDPATH**/ ?>

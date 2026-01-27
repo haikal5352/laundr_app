@@ -65,6 +65,7 @@ class ModelRelationshipTest extends TestCase
         UserAddress::create([
             'user_id' => $this->user->id,
             'label' => 'Rumah',
+            'recipient' => 'Test User',
             'address' => 'Jl. Test No. 1',
             'phone' => '081234567890',
             'is_default' => true,
@@ -73,6 +74,7 @@ class ModelRelationshipTest extends TestCase
         UserAddress::create([
             'user_id' => $this->user->id,
             'label' => 'Kantor',
+            'recipient' => 'Test User',
             'address' => 'Jl. Test No. 2',
             'phone' => '081234567891',
             'is_default' => false,
@@ -87,6 +89,7 @@ class ModelRelationshipTest extends TestCase
         UserAddress::create([
             'user_id' => $this->user->id,
             'label' => 'Rumah',
+            'recipient' => 'Test Default',
             'address' => 'Jl. Default',
             'phone' => '081234567890',
             'is_default' => true,
