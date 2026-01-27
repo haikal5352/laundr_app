@@ -151,7 +151,12 @@
                             </div>
                             <div class="flex justify-between items-center py-3 border-b border-slate-100">
                                 <span class="text-slate-500">Jumlah/Berat</span>
-                                <span class="font-bold text-slate-800">{{ $transaction->qty }} {{ $transaction->service->unit ?? '' }}</span>
+                                @php
+                                    $items = json_decode($transaction->items_data, true);
+                                    $isMulti = is_array($items) && count($items) > 1;
+                                    $unit = $isMulti ? 'Item' : ($transaction->service->unit ?? '');
+                                @endphp
+                                <span class="font-bold text-slate-800">{{ $transaction->qty }} {{ $unit }}</span>
                             </div>
                         @endif
                         <div class="flex justify-between items-center py-3 border-b border-slate-100">

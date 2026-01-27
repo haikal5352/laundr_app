@@ -1,7 +1,7 @@
 <x-guest-layout>
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-slate-50">
         <div
-            class="w-full sm:max-w-md mt-6 px-8 py-10 bg-white shadow-xl overflow-hidden sm:rounded-[2rem] border border-slate-100 relative">
+            class="w-full sm:max-w-md mt-6 px-8 py-10 bg-white shadow-xl overflow-hidden sm:rounded-[2rem] border border-slate-100 relative reveal">
 
             <!-- Decor -->
             <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-cyan-400"></div>
@@ -31,7 +31,7 @@
                 <div>
                     <label for="name" class="block text-sm font-bold text-slate-700 mb-2">Nama Lengkap</label>
                     <input id="name"
-                        class="block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 focus:border-blue-500 focus:bg-white focus:ring-blue-500 transition-colors"
+                        class="block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 font-medium focus:border-blue-500 focus:bg-white focus:ring-blue-500 transition-colors"
                         type="text" name="name" :value="old('name')" required autofocus
                         placeholder="Nama Lengkap Anda" />
                 </div>
@@ -40,7 +40,7 @@
                 <div>
                     <label for="email" class="block text-sm font-bold text-slate-700 mb-2">Email Address</label>
                     <input id="email"
-                        class="block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 focus:border-blue-500 focus:bg-white focus:ring-blue-500 transition-colors"
+                        class="block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 font-medium focus:border-blue-500 focus:bg-white focus:ring-blue-500 transition-colors"
                         type="email" name="email" :value="old('email')" required placeholder="nama@email.com" />
                 </div>
 
@@ -49,7 +49,7 @@
                     <label for="password" class="block text-sm font-bold text-slate-700 mb-2">Password</label>
                     <div class="relative">
                         <input id="password"
-                            class="block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 focus:border-blue-500 focus:bg-white focus:ring-blue-500 transition-colors pr-12"
+                            class="block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 font-medium focus:border-blue-500 focus:bg-white focus:ring-blue-500 transition-colors pr-12"
                             :type="show ? 'text' : 'password'" name="password" required autocomplete="new-password"
                             placeholder="••••••••" />
                         <button type="button" @click="show = !show"
@@ -79,7 +79,7 @@
                         Password</label>
                     <div class="relative">
                         <input id="password_confirmation"
-                            class="block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 focus:border-blue-500 focus:bg-white focus:ring-blue-500 transition-colors pr-12"
+                            class="block w-full rounded-xl border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 font-medium focus:border-blue-500 focus:bg-white focus:ring-blue-500 transition-colors pr-12"
                             :type="show ? 'text' : 'password'" name="password_confirmation" required
                             placeholder="••••••••" />
                         <button type="button" @click="show = !show"

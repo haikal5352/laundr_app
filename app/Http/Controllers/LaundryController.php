@@ -129,6 +129,26 @@ class LaundryController extends Controller
                 ]
             ]; 
 
+            // Siapkan Item Details untuk Midtrans
+            $midtransItems = array_map(function($item) {
+                return [
+                    'id' => 'SVC-' . $item['service_id'],
+                    'name' => $item['service_name'],
+                    'price' => (int) $item['price'],
+                    'quantity' => (int) $item['qty'],
+                ];
+            }, $itemsData);
+
+            // Jika ada voucher, masukkan sebagai item negatif (Diskon)
+            if ($discountAmount > 0) {
+                $midtransItems[] = [
+                    'id' => 'DISC-' . ($voucherCode ?? 'PROMO'),
+                    'name' => 'Voucher Diskon (' . $voucherCode . ')',
+                    'price' => - (int) $discountAmount,
+                    'quantity' => 1,
+                ];
+            }
+
             // Request Snap Token untuk TOTAL keseluruhan
             $midtransParams = [
                 'transaction_details' => [
@@ -139,14 +159,7 @@ class LaundryController extends Controller
                     'first_name' => $request->customer_name,
                     'phone' => $request->customer_phone,
                 ],
-                'item_details' => array_map(function($item) {
-                    return [
-                        'id' => 'SVC-' . $item['service_id'],
-                        'name' => $item['service_name'],
-                        'price' => (int) $item['price'],
-                        'quantity' => (int) $item['qty'],
-                    ];
-                }, $itemsData),
+                'item_details' => $midtransItems,
             ];
 
             try {

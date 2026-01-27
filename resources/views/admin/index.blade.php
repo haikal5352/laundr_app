@@ -134,7 +134,12 @@
                                         @if($items && is_array($items) && count($items) > 1)
                                             <div class="text-xs text-gray-400 font-normal">{{ count($items) }} layanan</div>
                                         @else
-                                            <div class="text-xs text-gray-400 font-normal">{{ $transaction->qty }} {{ $transaction->service->unit ?? '' }}</div>
+                                            @php
+                                                $items = json_decode($transaction->items_data, true);
+                                                $isMulti = is_array($items) && count($items) > 1;
+                                                $unit = $isMulti ? 'Item' : ($transaction->service->unit ?? '');
+                                            @endphp
+                                            <div class="text-xs text-gray-400 font-normal">{{ $transaction->qty }} {{ $unit }}</div>
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">

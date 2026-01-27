@@ -16,7 +16,7 @@
         </div>
 
         <div
-            class="w-full sm:max-w-md mt-6 px-8 py-10 bg-white/80 backdrop-blur-xl shadow-2xl overflow-hidden sm:rounded-[2.5rem] border border-white/50 relative z-10 transition-all duration-300 hover:shadow-blue-200/50">
+            class="w-full sm:max-w-md mt-6 px-8 py-10 bg-white/80 backdrop-blur-xl shadow-2xl overflow-hidden sm:rounded-[2.5rem] border border-white/50 relative z-10 transition-all duration-300 hover:shadow-blue-200/50 reveal">
 
             <!-- Decor -->
             <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-600 via-indigo-500 to-cyan-400">

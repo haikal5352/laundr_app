@@ -37,7 +37,12 @@
                     <td>{{ $t->created_at->format('d/m/Y H:i') }}</td>
                     <td>{{ $t->customer_name }}</td>
                     <td>{{ $t->service->name ?? '-' }}</td>
-                    <td>{{ $t->qty }} {{ $t->service->unit ?? '' }}</td>
+                    @php
+                        $items = json_decode($t->items_data, true);
+                        $isMulti = is_array($items) && count($items) > 1;
+                        $unit = $isMulti ? 'Item' : ($t->service->unit ?? '');
+                    @endphp
+                    <td>{{ $t->qty }} {{ $unit }}</td>
                     <td>Rp {{ number_format($t->total_price, 0, ',', '.') }}</td>
                     <td>{{ strtoupper($t->payment_method) }}</td>
                     <td>

@@ -4,6 +4,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        document.documentElement.classList.remove('dark');
+        localStorage.removeItem('theme');
+    </script>
+
     <title>{{ config('app.name', 'Laundry U9') }} - Premium Laundry Service</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&display=swap"
@@ -56,11 +61,35 @@
         .animate-rotate-slow {
             animation: rotate-slow 20s linear infinite;
         }
+        
+        /* Scroll Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        });
+    </script>
 </head>
 
 <body
-    class="antialiased text-slate-800 bg-slate-50 relative overflow-x-hidden selection:bg-blue-500 selection:text-white">
+    class="antialiased text-slate-800 bg-slate-50 relative overflow-x-hidden selection:bg-blue-500 selection:text-white transition-colors duration-300">
 
     <!-- Navbar -->
      @if(session('error'))
@@ -69,7 +98,9 @@
         <span class="block sm:inline">{{ session('error') }}</span>
     </div>
 @endif
-    <nav class="bg-white/80 backdrop-blur-lg border-b border-slate-100 sticky top-0 z-50">
+    <nav x-data="{ scrolled: false }" @scroll.window="scrolled = (window.pageYOffset > 20)" 
+         :class="{ 'bg-white/90 backdrop-blur-md shadow-md border-b border-slate-100': scrolled, 'bg-transparent border-transparent': !scrolled }" 
+         class="sticky top-0 z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20">
                 <div class="flex items-center gap-2">
@@ -83,6 +114,8 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
+                    <!-- Dark Mode Toggle -->
+
                     @auth
                         <span class="text-slate-600 text-sm font-medium hidden sm:block">
                             👋 Halo, {{ auth()->user()->name }}
@@ -112,13 +145,13 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="flex flex-col lg:flex-row items-center gap-16">
                 <!-- Left Content -->
-                <div class="lg:w-1/2 text-center lg:text-left">
+                <div class="lg:w-1/2 text-center lg:text-left reveal">
                     <div
                         class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 text-blue-600 font-bold text-xs uppercase tracking-wide mb-6">
                         <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
                         Laundry Terpercaya
                     </div>
-                    <h1 class="text-5xl lg:text-7xl font-black text-slate-900 leading-tight mb-8">
+                    <h1 class="text-5xl lg:text-7xl font-black text-slate-900 leading-tight mb-6">
                         Cucian Bersih,<br>
                         <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Hidup
                             Lebih Santai.</span>
@@ -130,14 +163,14 @@
 
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                         <a href="#reservasi"
-                            class="px-8 py-4 rounded-2xl bg-blue-600 text-white font-bold text-lg shadow-xl shadow-blue-200 hover:shadow-2xl hover:bg-blue-700 transition transform hover:-translate-y-1">
+                            class="px-8 py-4 rounded-2xl bg-blue-600 text-white font-bold text-lg shadow-xl shadow-blue-200 hover:shadow-2xl hover:bg-blue-700 transition transform hover:-translate-y-1 active:scale-95 duration-200">
                             Mulai Laundry
                         </a>
                     </div>
                 </div>
 
                 <!-- Right Image -->
-                <div class="lg:w-1/2 relative">
+                <div class="lg:w-1/2 relative reveal" style="transition-delay: 200ms">
                     <div class="relative z-10 animate-float">
                         <img src="https://img.freepik.com/free-vector/laundry-room-with-washing-machine-basket_107791-1634.jpg?w=1060&t=st=1702905000~exp=1702905600~hmac=xyz"
                             class="rounded-[2.5rem] shadow-2xl skew-y-3 hover:skew-y-0 transition duration-700 w-full object-cover">
@@ -188,7 +221,7 @@
     @endphp
     
     @if($activeVouchers->count() > 0)
-    <div class="py-8 bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 relative overflow-hidden">
+    <div class="py-8 bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 relative overflow-hidden reveal">
         <div class="absolute inset-0 opacity-20">
             <div class="absolute -top-10 -left-10 w-40 h-40 bg-white rounded-full blur-3xl"></div>
             <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-yellow-300 rounded-full blur-3xl"></div>
@@ -235,10 +268,12 @@
     </div>
     @endif
 
+
+
     <!-- Services Section -->
     <div class="py-24 bg-white relative" x-data="{ }">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-20">
+            <div class="text-center mb-20 reveal">
                 <h2 class="text-3xl lg:text-4xl font-black text-slate-900 mb-4">Layanan Lengkap</h2>
                 <p class="text-slate-500 max-w-2xl mx-auto">Klik layanan di bawah untuk langsung menambahkan ke pesanan Anda.</p>
             </div>
@@ -253,7 +288,7 @@
                     @endphp
                     <div
                         @click="$dispatch('add-service', { id: {{ $service->id }}, name: '{{ addslashes($service->name) }}', price: {{ $service->price }} }); document.getElementById('reservasi').scrollIntoView({ behavior: 'smooth' })"
-                        class="group bg-white rounded-[2rem] p-8 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-slate-100 {{ $delayClass }} cursor-pointer relative overflow-hidden">
+                        class="group bg-white rounded-[2rem] p-8 shadow-xl hover:shadow-blue-500/20 hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border border-slate-100 {{ $delayClass }} cursor-pointer relative overflow-hidden reveal" style="transition-delay: {{ $index * 150 }}ms">
                         <!-- Click indicator -->
                         <div class="absolute top-3 right-3 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                             + Tambah
@@ -293,7 +328,7 @@
     </div>
 
     <!-- Order Form Section -->
-    <div id="reservasi" class="py-24 bg-slate-50 relative overflow-hidden"
+    <div id="reservasi" class="py-24 bg-slate-50 relative overflow-hidden reveal"
         x-data="{
             type: 'dropoff',
             items: [],
@@ -419,7 +454,7 @@
         @add-service.window="addService($event.detail.id, $event.detail.name, $event.detail.price)"
     >
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="bg-white rounded-[2.5rem] shadow-2xl p-10 lg:p-14 border border-slate-100">
+            <div class="bg-white rounded-[2.5rem] shadow-2xl p-10 lg:p-14 border border-slate-100 transition-colors duration-300">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl font-black text-slate-900 mb-3">Buat Pesanan Baru</h2>
                     <p class="text-slate-500">Pilih layanan dari ikon di atas atau tambahkan manual di bawah.</p>
@@ -447,7 +482,7 @@
                                     placeholder="Nama Anda" value="{{ auth()->check() ? auth()->user()->name : '' }}">
                             </div>
                             <div class="space-y-2">
-                                <label class="text-sm font-bold text-slate-700">Nomor WhatsApp</label>
+                                <label class="text-sm font-bold text-slate-700 dark:text-slate-300">Nomor WhatsApp</label>
                                 @auth
                                     @php
                                         $defaultAddress = auth()->user()->addresses()->where('is_default', true)->first();
@@ -471,7 +506,7 @@
                                         </div>
                                     @else
                                         <input type="text" name="customer_phone" required
-                                            class="w-full bg-slate-50 border-0 rounded-xl px-5 py-4 font-medium focus:ring-2 focus:ring-blue-600 transition"
+                                            class="w-full bg-slate-50 dark:bg-slate-700 dark:text-white border-0 rounded-xl px-5 py-4 font-medium focus:ring-2 focus:ring-blue-600 transition"
                                             placeholder="08...">
                                         <p class="text-xs text-slate-400 mt-1">
                                             💡 <a href="{{ route('addresses.index') }}" target="_blank" class="text-blue-600 hover:underline">Simpan alamat</a> agar nomor terisi otomatis.
@@ -479,7 +514,7 @@
                                     @endif
                                 @else
                                     <input type="text" name="customer_phone" required
-                                        class="w-full bg-slate-50 border-0 rounded-xl px-5 py-4 font-medium focus:ring-2 focus:ring-blue-600 transition"
+                                        class="w-full bg-slate-50 dark:bg-slate-700 dark:text-white border-0 rounded-xl px-5 py-4 font-medium focus:ring-2 focus:ring-blue-600 transition"
                                         placeholder="08...">
                                 @endauth
                             </div>
@@ -533,7 +568,7 @@
 
                         <!-- Cart Items -->
                         <div class="space-y-2">
-                            <label class="text-sm font-bold text-slate-700">Daftar Layanan Dipilih</label>
+                            <label class="text-sm font-bold text-slate-700 dark:text-slate-300">Daftar Layanan Dipilih</label>
                             
                             <!-- Empty State -->
                             <div x-show="items.length === 0" class="bg-slate-50 rounded-xl p-8 text-center border-2 border-dashed border-slate-200">
@@ -670,7 +705,7 @@
                             <div class="grid grid-cols-2 gap-3">
                                 <label class="cursor-pointer">
                                     <input type="radio" name="payment_method" value="cash" class="peer sr-only" checked>
-                                    <div class="rounded-xl border-2 border-slate-100 p-4 text-center hover:bg-slate-50 peer-checked:border-blue-500 peer-checked:bg-blue-50 transition-all">
+                                    <div class="rounded-xl border-2 border-slate-100 p-4 text-center hover:bg-slate-50 peer-checked:border-blue-600 peer-checked:bg-blue-50 transition-all">
                                         <div class="text-3xl mb-2">💵</div>
                                         <div class="text-sm font-bold text-slate-700">Tunai</div>
                                         <div class="text-xs text-slate-400">Bayar di tempat</div>
@@ -679,7 +714,7 @@
 
                                 <label class="cursor-pointer">
                                     <input type="radio" name="payment_method" value="epayment" class="peer sr-only">
-                                    <div class="rounded-xl border-2 border-slate-100 p-4 text-center hover:bg-slate-50 peer-checked:border-blue-500 peer-checked:bg-blue-50 transition-all">
+                                    <div class="rounded-xl border-2 border-slate-100 p-4 text-center hover:bg-slate-50 peer-checked:border-blue-600 peer-checked:bg-blue-50 transition-all">
                                         <div class="text-3xl mb-2">📱</div>
                                         <div class="text-sm font-bold text-slate-700">E-Payment</div>
                                         <div class="text-xs text-slate-400">QRIS, Transfer, dll</div>
@@ -689,7 +724,7 @@
                         </div>
 
                         <button type="submit" :disabled="items.length === 0"
-                            :class="items.length === 0 ? 'bg-slate-300 cursor-not-allowed' : 'bg-slate-900 hover:bg-slate-800 transform hover:-translate-y-1'"
+                            :class="items.length === 0 ? 'bg-slate-300 cursor-not-allowed' : 'bg-slate-900 hover:bg-slate-800 transform hover:-translate-y-1 active:scale-95'"
                             class="w-full text-white font-bold text-lg py-5 rounded-xl transition shadow-xl hover:shadow-2xl">
                             <span x-show="items.length === 0">Pilih Layanan Terlebih Dahulu</span>
                             <span x-show="items.length > 0">Konfirmasi Pesanan (<span x-text="items.length"></span> Layanan)</span>
@@ -700,10 +735,9 @@
         </div>
     </div>
 
-    <!-- Testimonial Section -->
-    <div class="py-24 bg-white relative overflow-hidden">
+
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center mb-16">
+            <div class="text-center mb-16 reveal">
                 <span class="text-blue-600 font-bold tracking-widest uppercase text-sm">Review Pelanggan</span>
                 <h2 class="text-3xl lg:text-4xl font-black text-slate-900 mt-2">Kata Mereka Tentang Kami 💬</h2>
             </div>

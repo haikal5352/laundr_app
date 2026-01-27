@@ -5,8 +5,8 @@
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php $component->withAttributes([]); ?>
      <?php $__env->slot('header', null, []); ?> 
-        <h2 class="font-bold text-xl text-gray-800 leading-tight">
-            <?php echo e(__('Dashboard Pelanggan')); ?>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <?php echo e(__('Dashboard')); ?>
 
         </h2>
      <?php $__env->endSlot(); ?>
@@ -14,7 +14,8 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-2xl p-6 border-b-4 border-indigo-500 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg transition-colors duration-300">
+                <div class="p-6 bg-white border-b border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4">
                 <div>
                     <h3 class="text-2xl font-bold text-gray-800">
                         Halo, <?php echo e(Auth::user()->name); ?>! 👋
@@ -23,10 +24,10 @@
                 </div>
                 
                 <div class="flex gap-3">
-                    <a href="<?php echo e(route('addresses.index')); ?>" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-6 rounded-xl shadow transition flex items-center gap-2">
+                    <a href="<?php echo e(route('addresses.index')); ?>" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-6 rounded-xl shadow hover:shadow-md transition-all transform hover:-translate-y-0.5 active:scale-95 flex items-center gap-2">
                         📍 Kelola Alamat
                     </a>
-                    <a href="<?php echo e(route('home')); ?>" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition transform hover:-translate-y-1 flex items-center gap-2">
+                    <a href="<?php echo e(route('home')); ?>" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-indigo-500/30 transition-all transform hover:-translate-y-1 active:scale-95 flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                         </svg>
@@ -35,16 +36,13 @@
                 </div>
             </div>
 
-            <div class="flex items-center gap-2 px-1">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                </svg>
-                <h3 class="text-xl font-bold text-gray-800">Riwayat Pesanan Kamu</h3>
+            <div class="px-1 mb-4">
+                <h3 class="text-xl font-bold text-gray-800">Riwayat Pesanan</h3>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <?php $__empty_1 = true; $__currentLoopData = $transactions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $transaction): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                    <div class="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 overflow-hidden relative">
+                    <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl hover:scale-[1.02] transition-all duration-300 border border-gray-100 overflow-hidden relative transform">
                         
                         <div class="p-5 pb-0 flex justify-between items-start">
                             <div>
@@ -85,7 +83,12 @@
                                 </div>
                                 <div class="text-right">
                                     <p class="text-xs text-gray-400">Berat/Qty</p>
-                                    <p class="font-semibold text-gray-700"><?php echo e($transaction->qty); ?> <?php echo e($transaction->service->unit ?? ''); ?></p>
+                                    <?php
+                                        $items = json_decode($transaction->items_data, true);
+                                        $isMulti = is_array($items) && count($items) > 1;
+                                        $unit = $isMulti ? 'Item' : ($transaction->service->unit ?? '');
+                                    ?>
+                                    <p class="font-semibold text-gray-700"><?php echo e($transaction->qty); ?> <?php echo e($unit); ?></p>
                                 </div>
                             </div>
                         </div>

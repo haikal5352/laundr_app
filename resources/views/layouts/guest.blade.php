@@ -4,7 +4,12 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        document.documentElement.classList.remove('dark');
+        localStorage.removeItem('theme');
+    </script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
@@ -40,11 +45,35 @@
         .animate-float-delayed {
             animation: float-y 8s ease-in-out infinite 2s;
         }
+
+        /* Scroll Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        });
+    </script>
 </head>
 
 <body>
-    <div class="font-sans text-gray-900 antialiased">
+    <div class="font-sans text-gray-900 antialiased bg-slate-50 min-h-screen transition-colors duration-300">
         {{ $slot }}
     </div>
 </body>

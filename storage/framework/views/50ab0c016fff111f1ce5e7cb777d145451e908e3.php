@@ -143,7 +143,12 @@
                                         <?php if($items && is_array($items) && count($items) > 1): ?>
                                             <div class="text-xs text-gray-400 font-normal"><?php echo e(count($items)); ?> layanan</div>
                                         <?php else: ?>
-                                            <div class="text-xs text-gray-400 font-normal"><?php echo e($transaction->qty); ?> <?php echo e($transaction->service->unit ?? ''); ?></div>
+                                            <?php
+                                                $items = json_decode($transaction->items_data, true);
+                                                $isMulti = is_array($items) && count($items) > 1;
+                                                $unit = $isMulti ? 'Item' : ($transaction->service->unit ?? '');
+                                            ?>
+                                            <div class="text-xs text-gray-400 font-normal"><?php echo e($transaction->qty); ?> <?php echo e($unit); ?></div>
                                         <?php endif; ?>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
